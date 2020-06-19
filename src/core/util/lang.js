@@ -7,11 +7,26 @@ export function isReserved(str) {
 }
 // 定义对象的一个属性
 export function def(obj, key, val, enumerable) {
-  Object.defineProperties(obj, key, {
+  Object.defineProperty(obj, key, {
     value: val,
     enumerable: !!enumerable,
     writable: true,
     configurable: true
   })
 }
+// TO-READ
 const bailRE = new RegExp(`[^${unicodeRegExp.source}.$_\\d]`)
+// TO-READ
+export function parsePath(path) {
+  if(bailRE.test(path)) {
+    return
+  }
+  const segments = path.split('.')
+  return function(obj) {
+    for(let i=0; i<segments.length; i++) {
+      if(!obj) return
+      obj = obj[segments[i]]
+    }
+    return obj
+  }
+}
